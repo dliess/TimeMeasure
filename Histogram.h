@@ -4,55 +4,75 @@
 #include <cstdint>
 #include <vector>
 #include <string>
+#include <sstream>
 
-namespace Analyze
+namespace TimeMeasure
 {
 
-template<class UserClass, unsigned int MaxRange>
+template< class Period >
 class Histogram
 {
 public:
-    Histogram();
+    Histogram(unsigned int id);
+    ~Histogram();
+    Histogram& setHistogramRange(unsigned int range);
     void insert(uint32_t element);
-    std::string getName() const;
-    std::string getCsv() const;
+    std::string toGnuplotString() const;
+    using SamplePeriod = Period;
 private:
-    std::vector<uint32_t> m_histogram;
+    unsigned int m_id;
+    unsigned int m_range;
+    std::vector<uint32_t> m_histogramData;
+    uint32_t              m_rest;
 };
 
-template<class UserClass, unsigned int MaxRange>
-Histogram<UserClass, MaxRange>::Histogram()
+template< class Period >
+Histogram<Period>::Histogram(unsigned int id) :
+    m_id(id),
+    m_range(0),
+    m_rest(0)
 {
-    m_histogram.reserve(MaxRange+1);
+}
+
+template< class Period >
+Histogram<Period>& Histogram<Period>::setHistogramRange(unsigned int range)
+{
+    m_range = range;
+    m_histogramData.reserve(range);
+    return *this;
+}
+
+template< class Period >
+Histogram<Period>::~Histogram()
+{
 }
 
 
-template<class UserClass, unsigned int MaxRange>
-void Histogram<UserClass, MaxRange>::insert(uint32_t element)
+template< class Period >
+void Histogram<Period>::insert(uint32_t element)
 {
-    if(element < MaxRange)
+    if(element < m_range)
     {
-       m_histogram[element]++;
+       m_histogramData[element]++;
     }
     else
     {
-        m_histogram[MaxRange]++;
+        m_rest++;
     }
 }
 
-template<class UserClass, unsigned int MaxRange>
-std::string Histogram<UserClass, MaxRange>::getName() const
+template< class Period >
+std::string Histogram<Period>::toGnuplotString() const
 {
-
+    std::stringstream ss;
+    for(unsigned int i = 0; i < m_range; ++i)
+    {
+        ss << i << ", " << m_id << ", " << m_histogramData[i] << std::endl;
+    }
+    ss << m_range << ", " << m_id << ", " << m_rest << std::endl;
+    return ss.str();
 }
 
-template<class UserClass, unsigned int MaxRange>
-std::string Histogram<UserClass, MaxRange>::getCsv() const
-{
-    
-}
-
-
-} // namespace Analyze
+} // namespace TimeMeasure
 
 #endif
