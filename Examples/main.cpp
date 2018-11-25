@@ -1,8 +1,8 @@
 #include "Measurer.h"
+#include "Histogram.h"
 #include "CyclicDataOutputterThread.h"
 #include <fstream>
 #include <vector>
-#include "Histogram.h"
 
 using namespace TimeMeasure;
 

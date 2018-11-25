@@ -1,6 +1,9 @@
 # TimeMeasure
 
-# This header-only library provides easy to use time-interval histogram creation and streaming to varios destinations(StdOut, File, Udp)
+# This header-only library provides easy to use time-interval histogram creation and streaming to varios destinations(StdOut, File, Udp) in a string-format that can be drawn by _feedgnuplot_
+
+![Screenshot1](/Examples/hist-terminal.png?raw=true)
+![Screenshot2](/Examples/hist-graphic.png?raw=true)
 
 # Types
 * Measurer:
@@ -13,40 +16,55 @@
 * CyclicDataOutputterThread:
     A Thread to output the DataHolders data in an asynchronous manner. The destination can be determined by a template parameter.
 
-#Usage
-* Setup DataHolder(at this time only Histograms are implemented) of the Measurers that will be used. For simplicity we will use a typedef for the Histogram class
+# Usage
+* Setup DataHolder(at this time only Histograms are implemented) of the Measurers that will be used. For simplicity we will use a typedef for the Histogram class (for some predefined typedefs see TimeMeasureTypes.h)
 
+```
 using HistogramUs = Histogram< std::chrono::microseconds >;
 
 TimeMeasure::Measurer< 0, HistogramUs >::instance().setHistogramRange(200);
-
-* Create and setup Outputter-Thread object
-CyclicDataOutputterThread< HistogramUs, Destination::StdOut/File/Udp > outThread(TimeMeasure::Measurer< 0, HistogramUs >::instance().dataHolder());
+```
+## Create and setup Outputter-Thread object
+```
+CyclicDataOutputterThread< HistogramUs, Destination::StdOut/File/Udp >
+outThread(TimeMeasure::Measurer< 0, HistogramUs >::instance().dataHolder());
 outThread.destination().connect("ip", port);
 outThread.startThread(output-period in ms)
+```
+## Instrument your code in one of 2 ways
+### Interal measure with the Guard object
 
-* Instrument your code with the measuring points
-** Interal measure with the Guard object
+```
 {
     TimeMeasure::Measurer< 0, HistogramUs >::Guard guard;
     // Stuff you want to measure
 }
-** Repetition period measure 
+```
+### Repetition period measure
+```
 TimeMeasure::Measurer< 0, HistogramUs >::instance().sample()
+```
 
 # Visualization with feedgnuplot
 
 ## for Destination:StdOut
-./TimeMeasureExample | feedgnuplot ...
+```
+application | feedgnuplot ...
+```
 
 ## for Destination:File
+```
 tail -f1 "dumpfile" | feedgnuplot ...
-
+```
 ## for Destination:Udp
+```
 nc -u "ip" -k -p "port number" -l | feedgnuplot ...
-
+```
 ## feedgnuplot options
-feedgnuplot --domain --dataid --autolegend --stream  --curvestyleall 'with boxes fill solid 1.0' --extracmds 'set logscale y'
-
+```
+--domain --dataid --autolegend --stream  --curvestyleall 'with boxes fill solid 1.0' --extracmds 'set logscale y'
+```
 ### to show in terminal add
+```
 --extracmds 'set terminal dumb'
+```

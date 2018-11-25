@@ -1,7 +1,7 @@
 cmake_minimum_required (VERSION 2.6)
 project (TimeMeasure)
 
-find_package (Threads)
+find_package (Threads REQUIRED)
 
 add_library(${CMAKE_PROJECT_NAME} INTERFACE)
 target_include_directories(${CMAKE_PROJECT_NAME}
@@ -28,6 +28,7 @@ install(FILES "Measurer.h"
               "Histogram.h"
               "CyclicDataOutputterThread.h"
               "OutputterDestinations.h"
+              "TimeMeasureTypes.h"
         DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${CMAKE_PROJECT_NAME})
 
 
