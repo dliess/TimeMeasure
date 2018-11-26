@@ -38,7 +38,7 @@ template< class Period >
 Histogram<Period>& Histogram<Period>::setHistogramRange(unsigned int range)
 {
     m_range = range;
-    m_histogramData.reserve(range);
+    m_histogramData.resize(range, 0);
     return *this;
 }
 
