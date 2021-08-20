@@ -63,7 +63,7 @@ public:
         decimal_port[sizeof(decimal_port) / sizeof(decimal_port[0]) - 1] = '\0';
         struct addrinfo hints;
         memset(&hints, 0, sizeof(hints));
-        hints.ai_family = AF_UNSPEC;
+        hints.ai_family = AF_INET;
         hints.ai_socktype = SOCK_DGRAM;
         hints.ai_protocol = IPPROTO_UDP;
         int r(getaddrinfo(addr.c_str(), decimal_port, &hints, &m_addrinfo));
@@ -79,7 +79,14 @@ public:
             std::cerr << "could not create socket for: \"" << addr << ":" << decimal_port << "\"";
             return false;
         }
-        return true;
+       int broadcastEnable = 1;
+       int ret = setsockopt(m_socket, SOL_SOCKET, SO_BROADCAST, &broadcastEnable, sizeof(broadcastEnable));
+       if(ret == -1)
+       {
+           std::cerr << "setsockopt failed: " << strerror(errno) << "\n";
+           return false;
+       }
+       return true;
     }
     void send(const std::string& msg)
     {
