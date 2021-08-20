@@ -72,7 +72,10 @@ std::string Histogram<Period>::toGnuplotString() const
             ss << i << ", " << m_id << ", " << m_histogramData[i] << std::endl;
         }
     }
-    ss << m_range << ", " << m_id << ", " << m_rest << std::endl;
+    if(m_rest != 0)
+    {
+        ss << m_range << ", " << m_id << ", " << m_rest << std::endl;
+    }
     return ss.str();
 }
 
