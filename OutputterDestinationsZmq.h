@@ -19,10 +19,9 @@ public:
         m_socket(m_context, zmq::socket_type::pub)
     {
     }
-    bool bind(const std::string& bindAddr)
+    void bind(const std::string& bindAddr)
     {
         m_socket.bind(bindAddr);
-        return true;
     }
     void send(const std::string& msg)
     {    

@@ -31,10 +31,7 @@ int main()
                     &MyMeasurerUs<1>::instance().dataHolder(),
                     &MyMeasurerUs<2>::instance().dataHolder(),
                     &MyMeasurerUs<3>::instance().dataHolder() });
-    if(!outThreadZmq.destination().bind("tcp://127.0.0.1:12341"))
-    {
-        exit(1);
-    }
+    outThreadZmq.destination().bind("tcp://127.0.0.1:12341");
     outThreadZmq.startThread(1000);
 
 
