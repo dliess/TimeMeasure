@@ -3,10 +3,10 @@ set (CMAKE_CXX_STANDARD 11)
 
 if(CMAKE_PROJECT_NAME)
   set(TARGET_NAME TimeMeasure)
-else(CMAKE_PROJECT_NAME)
-  project (TimeMeasure)
+else()
+  project (TimeMeasure  LANGUAGES CXX)
   set(TARGET_NAME ${CMAKE_PROJECT_NAME})
-endif(CMAKE_PROJECT_NAME)
+endif()
 
 find_package (Threads REQUIRED)
 
@@ -20,6 +20,20 @@ target_link_libraries(${TARGET_NAME} INTERFACE ${CMAKE_THREAD_LIBS_INIT})
 
 add_subdirectory(Examples EXCLUDE_FROM_ALL)
 
+
+option(WITH_ZMQ "With Zmq" ON)
+include(cmake/CPM.cmake)
+if(${WITH_ZMQ})
+  CPMFindPackage(
+    NAME cppzmq
+    GITHUB_REPOSITORY zeromq/cppzmq
+    VERSION 4.7.0
+    OPTIONS
+      "CPPZMQ_BUILD_TESTS OFF"
+  )
+  target_link_libraries(${TARGET_NAME} INTERFACE cppzmq)
+  add_subdirectory(ZmqClient)
+endif()
 
 # installation
 
