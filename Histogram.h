@@ -65,17 +65,19 @@ template< class Period >
 std::string Histogram<Period>::toGnuplotString() const
 {
     std::stringstream ss;
+    ss << "\nclear\n";
     for(unsigned int i = 0; i < m_range; ++i)
     {
         if(m_histogramData[i] != 0)
         {
-            ss << i << ", " << m_id << ", " << m_histogramData[i] << std::endl;
+            ss << i << ", " << m_id << ", " << m_histogramData[i] << "\n";
         }
     }
     if(m_rest != 0)
     {
-        ss << m_range << ", " << m_id << ", " << m_rest << std::endl;
+        ss << m_range << ", " << m_id << ", " << m_rest << "\n";
     }
+    ss << "replot\n";
     return ss.str();
 }
 
