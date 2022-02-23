@@ -1,0 +1,23 @@
+{
+   "name": "TimeMeasureBuildEnv",
+   "build": {
+		"dockerfile": "Dockerfile"
+   },
+   "runArgs" : [
+   ],
+   "settings": { 
+      "terminal.integrated.shell.linux": "/bin/zsh",
+      "terminal.integrated.detectLocale": "off"
+   },
+   "mounts" : [
+      "type=bind,source=${env:HOME}/.ssh,target=/home/build-user/.ssh"
+   ],
+   "extensions": [
+      "eamodio.gitlens",
+      "ms-vscode.cpptools",
+      "twxs.cmake",
+      "ms-vscode.cmake-tools",
+      "jebbs.plantuml",
+      "xaver.clang-format"
+   ]
+}
