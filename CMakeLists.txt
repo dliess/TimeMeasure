@@ -64,6 +64,10 @@ install(EXPORT ${PROJECT_NAME}-targets
 
 configure_file(cmake/${PROJECT_NAME}Config.cmake.in cmake/${PROJECT_NAME}Config.cmake @ONLY)
 
-
-install(FILES       "${CMAKE_CURRENT_BINARY_DIR}/cmake/${TARGET_NAME}Config.cmake"
-        DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}")
+include(CMakePackageConfigHelpers)
+write_basic_package_version_file("${PROJECT_BINARY_DIR}/${PROJECT_NAME}Config-version.cmake" COMPATIBILITY SameMajorVersion)
+install(FILES 
+           "${CMAKE_CURRENT_BINARY_DIR}/cmake/${PROJECT_NAME}Config.cmake"
+           "${PROJECT_BINARY_DIR}/${PROJECT_NAME}Config-version.cmake" 
+        DESTINATION 
+           "${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}")
